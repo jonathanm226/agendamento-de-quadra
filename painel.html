@@ -4,23 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gestão - Quadra Esportiva</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 500: '#10b981', 600: '#059669', 700: '#047857' }
-                    }
-                }
-            }
+            theme: { extend: { colors: { brand: { 500: '#10b981', 600: '#059669', 700: '#047857' } } } }
         }
     </script>
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased">
@@ -33,7 +24,6 @@
             </div>
             <h2 class="text-2xl font-bold text-white mb-2">Painel Administrativo</h2>
             <p class="text-sm text-slate-400 mb-6">Acesso exclusivo do gestor da quadra</p>
-
             <form onsubmit="efetuarLogin(event)" class="space-y-4">
                 <div>
                     <input type="password" id="senhaInput" placeholder="Senha de Acesso" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-white focus:outline-none focus:border-emerald-500 tracking-widest text-lg">
@@ -46,7 +36,7 @@
         </div>
     </div>
 
-    <!-- Interface do Painel de Gestão -->
+    <!-- Dashboard -->
     <div id="mainDashboard" class="hidden min-h-screen flex flex-col">
         <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -58,7 +48,6 @@
                     <p class="text-xs text-slate-400">Quadra Esportiva</p>
                 </div>
             </div>
-
             <button onclick="efetuarLogout()" class="text-xs text-slate-400 hover:text-red-400 bg-slate-800 hover:bg-slate-800/80 px-3 py-2 rounded-lg transition border border-slate-700/50">
                 <i class="fa-solid fa-right-from-bracket mr-1"></i> Sair
             </button>
@@ -92,7 +81,6 @@
                         </div>
                         <p id="dashFatMes" class="text-2xl sm:text-3xl font-extrabold text-white">R$ 0,00</p>
                     </div>
-
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
                         <div class="flex justify-between items-center text-slate-400 mb-2">
                             <span class="text-xs uppercase font-bold tracking-wider">Agendamentos Totais</span>
@@ -100,7 +88,6 @@
                         </div>
                         <p id="dashTotalAgendamentos" class="text-2xl sm:text-3xl font-extrabold text-white">0</p>
                     </div>
-
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
                         <div class="flex justify-between items-center text-slate-400 mb-2">
                             <span class="text-xs uppercase font-bold tracking-wider">Sinais Recebidos</span>
@@ -110,7 +97,6 @@
                     </div>
                 </div>
 
-                <!-- Ações Rápidas -->
                 <div class="flex flex-wrap gap-3 pt-2">
                     <button onclick="abrirModalAgendamentoManual()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
                         <i class="fa-solid fa-plus"></i> Novo Agendamento Manual
@@ -166,18 +152,15 @@
             <section id="sec-config" class="hidden space-y-6 max-w-3xl">
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                     <h2 class="text-lg font-bold text-white mb-4">Dados do Estabelecimento</h2>
-                    
                     <form onsubmit="salvarConfiguracoes(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">Nome da Quadra / Estabelecimento</label>
                             <input type="text" id="cfgNome" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
                         </div>
-
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">Descrição / Sobre</label>
                             <textarea id="cfgSobre" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white"></textarea>
                         </div>
-
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">Endereço Completo</label>
@@ -188,7 +171,6 @@
                                 <input type="text" id="cfgWhatsapp" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
                             </div>
                         </div>
-
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-800 pt-4">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">Chave PIX (Sinal 50%)</label>
@@ -199,7 +181,6 @@
                                 <input type="text" id="cfgTitularPix" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
                             </div>
                         </div>
-
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-800 pt-4">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">Preço da Hora (R$)</label>
@@ -214,12 +195,10 @@
                                 <input type="time" id="cfgHorarioFim" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
                             </div>
                         </div>
-
                         <div class="border-t border-slate-800 pt-4">
                             <label class="block text-xs text-slate-400 mb-1">Nova Senha de Acesso ao Painel</label>
                             <input type="password" id="cfgSenha" placeholder="Deixe em branco para manter a atual" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
                         </div>
-
                         <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow transition mt-4">
                             Salvar Configurações no Supabase
                         </button>
@@ -236,29 +215,18 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let config = {
-            id: 1,
-            nome: "Quadra Esportiva Pro",
-            sobre: "A melhor quadra da região para o seu futebol, voleibol ou basquete.",
-            endereco: "Rua do Esporte, 123 - Bairro Central",
-            preco_hora: 120.00,
-            horario_inicio: "08:00",
-            horario_fim: "23:00",
-            whatsapp: "5531999999999",
-            chave_pix: "31999999999",
-            titular_pix: "Quadra Esportiva Ltda",
-            senha_admin: "admin123"
+            id: 1, nome: "Quadra Esportiva Pro", sobre: "A melhor quadra da região.", endereco: "Rua do Esporte",
+            preco_hora: 120.00, horario_inicio: "08:00", horario_fim: "23:00", whatsapp: "5531999999999",
+            chave_pix: "31999999999", titular_pix: "Quadra Esportiva Ltda", senha_admin: "admin123"
         };
 
         document.addEventListener("DOMContentLoaded", () => {
-            if (sessionStorage.getItem('quadra_admin_auth') === 'true') {
-                liberarPainel();
-            }
+            if (sessionStorage.getItem('quadra_admin_auth') === 'true') liberarPainel();
         });
 
         async function efetuarLogin(e) {
             e.preventDefault();
             const senha = document.getElementById('senhaInput').value;
-            
             try {
                 const { data } = await supabaseClient.from('configuracoes').select('senha_admin').single();
                 if (data && data.senha_admin) config.senha_admin = data.senha_admin;
@@ -267,9 +235,7 @@
             if (senha === config.senha_admin) {
                 sessionStorage.setItem('quadra_admin_auth', 'true');
                 liberarPainel();
-            } else {
-                alert('Senha incorreta!');
-            }
+            } else alert('Senha incorreta!');
         }
 
         function efetuarLogout() {
@@ -301,14 +267,12 @@
 
             let agendamentos = [];
             try {
-                const { data, error } = await supabaseClient.from('agendamentos').select('*');
-                if (data && !error && Array.isArray(data)) {
-                    agendamentos = data;
-                }
+                // AGORA PUXANDO DA TABELA NOVA EXCLUSIVA
+                const { data, error } = await supabaseClient.from('agendamentos_quadra').select('*');
+                if (data && !error && Array.isArray(data)) agendamentos = data;
             } catch(e) {}
 
-            let totalFat = 0;
-            let totalSinais = 0;
+            let totalFat = 0; let totalSinais = 0;
             let totalAgendamentosCount = agendamentos.length;
 
             agendamentos.forEach(a => {
@@ -329,24 +293,16 @@
                 tbodyAgenda.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">Nenhum agendamento registrado até o momento.</td></tr>`;
             } else {
                 agendamentos.forEach(a => {
-                    // Mapeamento seguro com Fallbacks para evitar "undefined"
-                    const nome = a.nome_cliente || a.nome || 'Cliente não identificado';
-                    const telefone = a.telefone_cliente || a.telefone || '-';
-                    const horaInicio = a.hora_inicio || a.hora || '';
-                    const tipo = a.tipo || 'avulso';
-                    const status = a.status || 'pendente';
-                    
                     const dataFmt = a.data ? a.data.split('-').reverse().join('/') : 'Recorrente';
-
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td class="py-3 px-4 font-semibold text-white">${dataFmt} ${horaInicio}</td>
-                        <td class="py-3 px-4">${nome}</td>
-                        <td class="py-3 px-4">${telefone}</td>
-                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${tipo === 'mensalista' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-300'}">${tipo}</span></td>
-                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${status === 'confirmado' || status === 'ativo' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${status}</span></td>
+                        <td class="py-3 px-4 font-semibold text-white">${dataFmt} ${a.hora_inicio || ''}</td>
+                        <td class="py-3 px-4">${a.nome_cliente || '-'}</td>
+                        <td class="py-3 px-4">${a.telefone_cliente || '-'}</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${a.tipo === 'mensalista' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-300'}">${a.tipo || 'avulso'}</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${a.status === 'confirmado' || a.status === 'ativo' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${a.status || 'pendente'}</span></td>
                         <td class="py-3 px-4 text-right">
-                            <button onclick="enviarLembrete('${telefone}', '${nome}', '${a.data || ''}', '${horaInicio}')" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded transition">
+                            <button onclick="enviarLembrete('${a.telefone_cliente}', '${a.nome_cliente}', '${a.data || ''}', '${a.hora_inicio || ''}')" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded transition">
                                 <i class="fa-brands fa-whatsapp"></i> Lembrete
                             </button>
                         </td>
@@ -358,14 +314,11 @@
             const tbodyClientes = document.getElementById('corpoTabelaClientes');
             tbodyClientes.innerHTML = '';
             
-            const clientesUnicos = [];
-            const mapaTelefones = new Set();
+            const clientesUnicos = []; const mapaTelefones = new Set();
             agendamentos.forEach(a => {
-                const nome = a.nome_cliente || a.nome;
-                const telefone = a.telefone_cliente || a.telefone;
-                if (telefone && !mapaTelefones.has(telefone)) {
-                    mapaTelefones.add(telefone);
-                    clientesUnicos.push({ nome: nome || 'Cliente', telefone: telefone });
+                if (a.telefone_cliente && !mapaTelefones.has(a.telefone_cliente)) {
+                    mapaTelefones.add(a.telefone_cliente);
+                    clientesUnicos.push({ nome: a.nome_cliente || 'Cliente', telefone: a.telefone_cliente });
                 }
             });
 
@@ -399,7 +352,6 @@
             config.preco_hora = parseFloat(document.getElementById('cfgPrecoHora').value);
             config.horario_inicio = document.getElementById('cfgHorarioInicio').value;
             config.horario_fim = document.getElementById('cfgHorarioFim').value;
-
             const novaSenha = document.getElementById('cfgSenha').value;
             if (novaSenha.trim() !== '') config.senha_admin = novaSenha;
 
@@ -413,7 +365,6 @@
                 b.classList.remove('border-emerald-500', 'text-emerald-400');
                 b.classList.add('border-transparent', 'text-slate-400');
             });
-
             document.getElementById(`sec-${abaId}`).classList.remove('hidden');
             document.getElementById(`tab-${abaId}`).classList.add('border-emerald-500', 'text-emerald-400');
             document.getElementById(`tab-${abaId}`).classList.remove('border-transparent', 'text-slate-400');
@@ -425,16 +376,12 @@
             const data = prompt("Data (YYYY-MM-DD):");
             const hora = prompt("Hora de Inicio (Ex: 19:00):");
             if(nome && tel && data && hora){
-                supabaseClient.from('agendamentos').insert([{
-                    nome_cliente: nome,
-                    telefone_cliente: tel,
-                    data: data,
-                    hora_inicio: hora,
-                    hora_fim: `${parseInt(hora)+1}:00`,
-                    valor: config.preco_hora,
-                    sinal_pago: config.preco_hora * 0.5,
-                    status: 'confirmado',
-                    tipo: 'manual'
+                // INSERINDO NA TABELA NOVA EXCLUSIVA
+                supabaseClient.from('agendamentos_quadra').insert([{
+                    nome_cliente: nome, telefone_cliente: tel, data: data,
+                    hora_inicio: hora, hora_fim: `${parseInt(hora)+1}:00`,
+                    valor: config.preco_hora, sinal_pago: config.preco_hora * 0.5,
+                    status: 'confirmado', tipo: 'manual'
                 }]).then(() => carregarDadosPainel());
             }
         }
@@ -444,15 +391,12 @@
             const tel = prompt("Telefone:");
             const hora = prompt("Hora Fixa (Ex: 20:00):");
             if(nome && tel && hora){
-                supabaseClient.from('agendamentos').insert([{
-                    nome_cliente: nome,
-                    telefone_cliente: tel,
-                    hora_inicio: hora,
-                    hora_fim: `${parseInt(hora)+1}:00`,
-                    valor: config.preco_hora * 4,
-                    sinal_pago: config.preco_hora * 2,
-                    status: 'confirmado',
-                    tipo: 'mensalista'
+                // INSERINDO NA TABELA NOVA EXCLUSIVA
+                supabaseClient.from('agendamentos_quadra').insert([{
+                    nome_cliente: nome, telefone_cliente: tel,
+                    hora_inicio: hora, hora_fim: `${parseInt(hora)+1}:00`,
+                    valor: config.preco_hora * 4, sinal_pago: config.preco_hora * 2,
+                    status: 'confirmado', tipo: 'mensalista'
                 }]).then(() => carregarDadosPainel());
             }
         }
