@@ -289,24 +289,28 @@
                 if (data) config = { ...config, ...data };
             } catch(e) {}
 
-            document.getElementById('cfgNome').value = config.nome;
-            document.getElementById('cfgSobre').value = config.sobre;
-            document.getElementById('cfgEndereco').value = config.endereco;
-            document.getElementById('cfgWhatsapp').value = config.whatsapp;
+            document.getElementById('cfgNome').value = config.nome || '';
+            document.getElementById('cfgSobre').value = config.sobre || '';
+            document.getElementById('cfgEndereco').value = config.endereco || '';
+            document.getElementById('cfgWhatsapp').value = config.whatsapp || '';
             document.getElementById('cfgChavePix').value = config.chave_pix || '';
             document.getElementById('cfgTitularPix').value = config.titular_pix || '';
-            document.getElementById('cfgPrecoHora').value = config.preco_hora;
-            document.getElementById('cfgHorarioInicio').value = config.horario_inicio;
-            document.getElementById('cfgHorarioFim').value = config.horario_fim;
+            document.getElementById('cfgPrecoHora').value = config.preco_hora || 120.00;
+            document.getElementById('cfgHorarioInicio').value = config.horario_inicio || '08:00';
+            document.getElementById('cfgHorarioFim').value = config.horario_fim || '23:00';
 
             let agendamentos = [];
             try {
-                const { data } = await supabaseClient.from('agendamentos').select('*').order('created_at', { ascending: false });
-                if (data) agendamentos = data;
+                const { data, error } = await supabaseClient.from('agendamentos').select('*');
+                if (data && !error && Array.isArray(data)) {
+                    agendamentos = data;
+                }
             } catch(e) {}
 
             let totalFat = 0;
             let totalSinais = 0;
+            let totalAgendamentosCount = agendamentos.length;
+
             agendamentos.forEach(a => {
                 if (a.status !== 'cancelado') {
                     totalFat += Number(a.valor || 0);
@@ -316,24 +320,33 @@
 
             document.getElementById('dashFatMes').innerText = `R$ ${totalFat.toFixed(2)}`;
             document.getElementById('dashSinais').innerText = `R$ ${totalSinais.toFixed(2)}`;
-            document.getElementById('dashTotalAgendamentos').innerText = agendamentos.length;
+            document.getElementById('dashTotalAgendamentos').innerText = totalAgendamentosCount;
 
             const tbodyAgenda = document.getElementById('corpoTabelaAgenda');
             tbodyAgenda.innerHTML = '';
             
-            if (agendamentos.length === 0) {
+            if (totalAgendamentosCount === 0) {
                 tbodyAgenda.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">Nenhum agendamento registrado até o momento.</td></tr>`;
             } else {
                 agendamentos.forEach(a => {
+                    // Mapeamento seguro com Fallbacks para evitar "undefined"
+                    const nome = a.nome_cliente || a.nome || 'Cliente não identificado';
+                    const telefone = a.telefone_cliente || a.telefone || '-';
+                    const horaInicio = a.hora_inicio || a.hora || '';
+                    const tipo = a.tipo || 'avulso';
+                    const status = a.status || 'pendente';
+                    
+                    const dataFmt = a.data ? a.data.split('-').reverse().join('/') : 'Recorrente';
+
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td class="py-3 px-4 font-semibold text-white">${a.data ? a.data.split('-').reverse().join('/') : 'Recorrente'} ${a.hora_inicio}</td>
-                        <td class="py-3 px-4">${a.nome_cliente}</td>
-                        <td class="py-3 px-4">${a.telefone_cliente}</td>
-                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${a.tipo === 'mensalista' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-300'}">${a.tipo}</span></td>
-                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${a.status === 'confirmado' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${a.status}</span></td>
+                        <td class="py-3 px-4 font-semibold text-white">${dataFmt} ${horaInicio}</td>
+                        <td class="py-3 px-4">${nome}</td>
+                        <td class="py-3 px-4">${telefone}</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${tipo === 'mensalista' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-300'}">${tipo}</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold ${status === 'confirmado' || status === 'ativo' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${status}</span></td>
                         <td class="py-3 px-4 text-right">
-                            <button onclick="enviarLembrete('${a.telefone_cliente}', '${a.nome_cliente}', '${a.data}', '${a.hora_inicio}')" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded transition">
+                            <button onclick="enviarLembrete('${telefone}', '${nome}', '${a.data || ''}', '${horaInicio}')" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded transition">
                                 <i class="fa-brands fa-whatsapp"></i> Lembrete
                             </button>
                         </td>
@@ -348,9 +361,11 @@
             const clientesUnicos = [];
             const mapaTelefones = new Set();
             agendamentos.forEach(a => {
-                if (a.telefone_cliente && !mapaTelefones.has(a.telefone_cliente)) {
-                    mapaTelefones.add(a.telefone_cliente);
-                    clientesUnicos.push({ nome: a.nome_cliente, telefone: a.telefone_cliente });
+                const nome = a.nome_cliente || a.nome;
+                const telefone = a.telefone_cliente || a.telefone;
+                if (telefone && !mapaTelefones.has(telefone)) {
+                    mapaTelefones.add(telefone);
+                    clientesUnicos.push({ nome: nome || 'Cliente', telefone: telefone });
                 }
             });
 
